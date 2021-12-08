@@ -71,7 +71,7 @@ def bot():
             hotels = r.json()
             for i in hotels:
                 linkrates =  i['rates']
-                msg.body(f'{i["Hname"]}\n{i["location"]}\n{i["Services"]}\n {i["website"]}\n {i["email"]}' + 'Download the rates here\n' + linkrates)  
+                msg.body(f'{i["Hname"]}\n{i["location"]}\n{i["Services"]}\n {i["website"]}\n {i["email"]}' + '\n\n Download the rates here\n' + linkrates)  
                 msg.media(i['Image'])
                 #msg.media(i['rates'])
                 msg.body('\n-------------------------------\n')
