@@ -70,9 +70,10 @@ def bot():
         if r.status_code == 200:
             hotels = r.json()
             for i in hotels:
-                msg.body(f'{i["Hname"]}\n{i["location"]}\n{i["Services"]}\n {i["Website"]}\n {i["email"]}')  
+                linkrates =  i['rates']
+                msg.body(f'{i["Hname"]}\n{i["location"]}\n{i["Services"]}\n {i["Website"]}\n {i["email"]}' + 'Download the rates here\n' + linkrates)  
                 msg.media(i['Image'])
-                msg.media(i['rates'])
+                #msg.media(i['rates'])
                 msg.body('\n-------------------------------\n')
                 responded = True
             app.logger.info('request for hotels')
