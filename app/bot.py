@@ -47,7 +47,7 @@ def bot():
                 msg.media(i['image'])
                 msg.body('\n-------------------------------\n')
                 responded = True
-            app.logger.info(data)
+            app.logger.info('request for destinations')
         else:
             msg.body('I could not retrieve any destination, sorry.')
 
@@ -57,12 +57,53 @@ def bot():
         if r.status_code == 200:
             cars = r.json()
             for i in cars:
-                msg.body(f'{i["type"]}\n + Location+ {i["carlocation"]}\n{i["price"]}\n+ 0 + {i["contact"]}')  
+                msg.body(f'{i["type"]}\n {i["carlocation"]}\n{i["price"]}\n {i["contact"]}')  
                 msg.media(i['carimage'])
                 msg.body('\n-------------------------------\n')
                 responded = True
+            app.logger.info('request for car hire')
         else:
             msg.body('I couldn''t find any car, sorry.')
+    if 'hotel' in incoming_msg:
+        #return hotels
+        r = requests.get('http://xplorebot.herokuapp.com/hotels/?format=json')
+        if r.status_code == 200:
+            hotels = r.json()
+            for i in hotels:
+                msg.body(f'{i["Hname"]}\n{i["location"]}\n{i["Services"]}\n {i["Website"]}\n {i["email"]}')  
+                msg.media(i['Image'])
+                msg.media(i['rates'])
+                msg.body('\n-------------------------------\n')
+                responded = True
+            app.logger.info('request for hotels')
+        else:
+            msg.body('I couldn''t find any hotel, sorry.')
+    if 'tour companies' in incoming_msg:
+        #return tour companies
+        r = requests.get('http://xplorebot.herokuapp.com/tourcompanies/?format=json')
+        if r.status_code == 200:
+            tourcompanies = r.json()
+            for i in tourcompanies:
+                msg.body(f'{i["Cname"]}\n {i["location"]}\n{i["Services"]}\n {i["website"]}\n {i["email"]}')  
+                msg.media(i['Cimage'])
+                msg.body('\n-------------------------------\n')
+                responded = True
+            app.logger.info('request for tour companies')
+        else:
+            msg.body('I couldn''t find any tour company, sorry.')
+    if 'tour guides' in incoming_msg:
+        #return tour guides
+        r = requests.get('http://xplorebot.herokuapp.com/tourguides/?format=json')
+        if r.status_code == 200:
+            tourguides = r.json()
+            for i in tourguides:
+                msg.body(f'{i["Tname"]}\n {i["Bio"]}\n{i["phonenumber"]}\n {i["link"]}\n')  
+                msg.media(i['profileimage'])
+                msg.body('\n-------------------------------\n')
+                responded = True
+            app.logger.info('request for tour guides')
+        else:
+            msg.body('I couldn''t find any tour guide, sorry.')
        
         
     if 'trip' in incoming_msg:
@@ -107,7 +148,7 @@ def bot():
         msg.body('You are welcome!')
         responded = True
     if not responded:
-        msg.body('Hello I am Xplorebot I give recommendations about  tourism and new trip offers')
+        msg.body('Hello \U0001f600 , I am Xplorebot I give recommendations about various tourism aspects in Uganda which include.\n Destinations\nTrips\n Facts\nHotels and Accommodation\n Car hire\n Tour Companies \nYou can also ask me to send you tweets, \nThank you for using Xplorebot')
         app.logger.info('request for default response')
        
     return str(resp)
