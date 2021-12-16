@@ -112,24 +112,26 @@ def bot():
         r = requests.get('https://xplorebot.herokuapp.com/trips/?format=json')
         if r.status_code == 200:
             tripdata = r.json()
-            poster = tripdata[1]['poster']
-            desc = tripdata[1]['desc']
-            duration =tripdata[1]['duration']
-            inclusions = tripdata[1]['Inclusions']
-            exclusions = tripdata[1]['Exclusions']
-            date = tripdata[1]['Date']
-            accmtype = tripdata[1]['accmtype']
-            price = tripdata[1]['price']
-            payments = tripdata[1]['paymentmthd']
+            for i in tripdata:
+                poster = tripdata[i]['poster']
+                desc = tripdata[i]['desc']
+                duration =tripdata[i]['duration']
+                inclusions = tripdata[i]['Inclusions']
+                exclusions = tripdata[i]['Exclusions']
+                date = tripdata[i]['Date']
+                accmtype = tripdata[i]['accmtype']
+                price = tripdata[i]['price']
+                payments = tripdata[i]['paymentmthd']
             
-            tripdataresponse = f'{desc}\n Duration:{duration}\n Inclusions:{inclusions}\n Date: {date}\n Accomodation Type:{accmtype}\n Price: {price}\n Payement Method:{payments}'
+                tripdataresponse = f'{desc}\n Duration:{duration}\n Inclusions:{inclusions}\n Date: {date}\n Accomodation Type:{accmtype}\n Price: {price}\n Payement Method:{payments}'
+                msg.body(tripdataresponse)  
+                msg.media(poster)
+                responded = True
+                app.logger.info('request for trips')
         else:
-            tripdataresponse = 'I could not retrieve any Trips at the moment, sorry.'
+            msg.body('I could not retrieve any Trips at the moment, sorry.') 
 
-        msg.body(tripdataresponse)  
-        msg.media(poster)
-        responded = True
-        app.logger.info('request for trips')
+        
     
     if 'fact' in incoming_msg:
         r = requests.get('https://xplorebot.herokuapp.com/facts/?format=json')  
