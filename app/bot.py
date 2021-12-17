@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 import requests
 import logging
 import json
@@ -17,7 +17,7 @@ def bot():
     resp = MessagingResponse()
     msg = resp.message()
     responded = False
-    if 'tweets'in incoming_msg:
+    if '7'in incoming_msg:
         #Retreive tweets from Twitter API
         consumer_key = 'GWA86Mzj6gVmGQVPR4V2tL8Qk'
         consumer_secret = '4sahREY1Lzp82R1Ap49nIxUnBHXAaZjFGd3kuekHgJUzHItk7n'
@@ -35,7 +35,7 @@ def bot():
         responded = True
         app.logger.info('request for tweets')
         
-    if 'destination' in incoming_msg:
+    if '1' in incoming_msg:
         # return a destination
         r = requests.get('http://xplorebot.herokuapp.com/destinations/?format=json')
         if r.status_code == 200:
@@ -45,13 +45,13 @@ def bot():
             for i in data:
                 msg.body(f'{i["name"]}\n{i["about"]}\n{i["link"]}\n')  
                 msg.media(i['image'])
-                msg.body('\n-------------------------------\n')
+                msg.body('\n-------------------------------\n\n')
                 responded = True
             app.logger.info('request for destinations')
         else:
             msg.body('I could not retrieve any destination, sorry.')
 
-    if 'car' in incoming_msg:
+    if '5' in incoming_msg:
         #return cars 
         r = requests.get('http://xplorebot.herokuapp.com/carhire/?format=json')
         if r.status_code == 200:
@@ -59,12 +59,12 @@ def bot():
             for i in cars:
                 msg.body(f'{i["type"]}\n {i["carlocation"]}\n{i["price"]}\n {i["contact"]}')  
                 msg.media(i['carimage'])
-                msg.body('\n-------------------------------\n')
+                msg.body('\n-------------------------------\n\n\n ')
                 responded = True
             app.logger.info('request for car hire')
         else:
             msg.body('I couldn''t find any car, sorry.')
-    if 'hotel' in incoming_msg:
+    if '4' in incoming_msg:
         #return hotels
         r = requests.get('http://xplorebot.herokuapp.com/hotels/?format=json')
         if r.status_code == 200:
@@ -79,7 +79,7 @@ def bot():
             app.logger.info('request for hotels')
         else:
             msg.body('I couldn''t find any hotel, sorry.')
-    if 'tour companies' in incoming_msg:
+    if '6' in incoming_msg:
         #return tour companies
         r = requests.get('http://xplorebot.herokuapp.com/tourcompanies/?format=json')
         if r.status_code == 200:
@@ -92,7 +92,7 @@ def bot():
             app.logger.info('request for tour companies')
         else:
             msg.body('I couldn''t find any tour company, sorry.')
-    if 'tour guides' in incoming_msg:
+    if '8' in incoming_msg:
         #return tour guides
         r = requests.get('http://xplorebot.herokuapp.com/tourguides/?format=json')
         if r.status_code == 200:
@@ -100,32 +100,33 @@ def bot():
             for i in tourguides:
                 msg.body(f'{i["Tname"]}\n {i["Bio"]}\n{i["phonenumber"]}\n {i["link"]}\n')  
                 msg.media(i['profileimage'])
-                msg.body('\n-------------------------------\n')
+                msg.body('\n-------------------------------\n\n')
                 responded = True
             app.logger.info('request for tour guides')
         else:
             msg.body('I couldn''t find any tour guide, sorry.')
        
         
-    if 'trip' in incoming_msg:
+    if '2' in incoming_msg:
         # return a trip
         r = requests.get('https://xplorebot.herokuapp.com/trips/?format=json')
         if r.status_code == 200:
             tripdata = r.json()
             for i in tripdata:
-                poster = tripdata[i]['poster']
-                desc = tripdata[i]['desc']
-                duration =tripdata[i]['duration']
-                inclusions = tripdata[i]['Inclusions']
-                exclusions = tripdata[i]['Exclusions']
-                date = tripdata[i]['Date']
-                accmtype = tripdata[i]['accmtype']
-                price = tripdata[i]['price']
-                payments = tripdata[i]['paymentmthd']
+                # poster = tripdata[i]['poster']
+                # desc = tripdata[i]['desc']
+                # duration =tripdata[i]['duration']
+                # inclusions = tripdata[i]['Inclusions']
+                # exclusions = tripdata[i]['Exclusions']
+                # date = tripdata[i]['Date']
+                # accmtype = tripdata[i]['accmtype']
+                # price = tripdata[i]['price']
+                # payments = tripdata[i]['paymentmthd']
             
-                tripdataresponse = f'{desc}\n Duration:{duration}\n Inclusions:{inclusions}\n Date: {date}\n Accomodation Type:{accmtype}\n Price: {price}\n Payement Method:{payments}'
+                tripdataresponse = f'{i["desc"]}\n Duration:{i["duration"]}\n Inclusions:{i["inclusions"]}\n Date: {i["date"]}\n Accomodation Type:{i["accmtype"]}\n Price: {{i["price"}}\n Payement Method:{i["payments"]}'
                 msg.body(tripdataresponse)  
-                msg.media(poster)
+                msg.media(i['poster'])
+                msg.body('\n-------------------------------\n\n')
                 responded = True
                 app.logger.info('request for trips')
         else:
@@ -133,7 +134,7 @@ def bot():
 
         
     
-    if 'fact' in incoming_msg:
+    if '3' in incoming_msg:
         r = requests.get('https://xplorebot.herokuapp.com/facts/?format=json')  
         if r.status_code == 200: 
             factdata  = r.json()
@@ -151,37 +152,21 @@ def bot():
         msg.body('You are welcome!')
         responded = True
     if not responded:
-        msg.body('Hello \U0001f600 , I am Xplorebot I give recommendations about various tourism aspects in Uganda which include.\n Destinations\nTrips\n Facts\nHotels and Accommodation\n Car hire\n Tour Companies \nYou can also ask me to send you tweets, \nThank you for using Xplorebot')
+        msg.body('Hello \U0001f600 , I am Xplorebot I give recommendations about various tourism aspects in Uganda. Choose from the following Menu.\n1.Destinations\n2.Trips\n 3.Facts\n4.Hotels and Accommodation\n5.Car hire\n6.Tour Companies \n7.Tweets\n8.Tour Guides, \nThank you for using Xplorebot')
         app.logger.info('request for default response')
        
     return str(resp)
 
-# @app.route('/print')
-# def printMsg():
-#     consumer_key = 'GWA86Mzj6gVmGQVPR4V2tL8Qk'
-#     consumer_secret = '4sahREY1Lzp82R1Ap49nIxUnBHXAaZjFGd3kuekHgJUzHItk7n'
-#     access_token = '1041371062414528513-irZGuN4dPecJqFt1whbHeGyqdbavgH'
-#     access_token_secret = 'ehP1RRdjQGDlGF1d2MKIp22NrGdzRwba9uhrE5pHr8LP5'
-#     auth =tweepy.OAuthHandler(consumer_key, consumer_secret)
-#     auth.set_access_token(access_token, access_token_secret)
-#     api = tweepy.API(auth)
-#     screen_name = 'TourismBoardUg'
-#     count = 3
-#     tweets = api.user_timeline(screen_name=screen_name, count=count)
-#     r2 = requests.get('http://xplorebot.herokuapp.com/destinations/?format=json')
-#     data = r2.json()
-#     name = data[0]['name']
-#     description = data[0]['about']
-#     image = data[0]['image']
-#     link = data[0]['link']
+@app.route('/print')
+def printMsg():
 
-#     # name = data2['name']
-#     # image = data2['image']
-#     # description = data2['about']
-#     app.logger.warning('testing warning log')
-#     app.logger.error('testing error log')
-#     app.logger.info('some cool stuff')
-#     return  tweets[0].text + '\n' + tweets[1].text + '\n' + tweets[2].text
+    r2 = requests.get('http://xplorebot.herokuapp.com/destinations/?format=json')
+    data = r2.json()
+    for dest in data:
+        
+            
+        print(dest["image"])
+    return 'done'
 
 if __name__ == '__main__':
     app.run()
