@@ -123,7 +123,7 @@ def bot():
                 # price = tripdata[i]['price']
                 # payments = tripdata[i]['paymentmthd']
             
-                tripdataresponse = f'{i["desc"]}\n Duration:{i["duration"]}\n Inclusions:{i["inclusions"]}\n Date: {i["date"]}\n Accomodation Type:{i["accmtype"]}\n Price: {i["price"]} \n Payement Method:{i["payments"]}'
+                tripdataresponse = f'{i["desc"]}\n {i["duration"]}\n {i["inclusions"]}\n {i["date"]}\n {i["accmtype"]}\n {i["price"]} \n {i["payments"]}'
                 msg.body(tripdataresponse)  
                 msg.media(i['poster'])
                 msg.body('\n-------------------------------\n\n')
