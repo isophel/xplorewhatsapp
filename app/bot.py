@@ -19,18 +19,18 @@ def bot():
     responded = False
     if '7'in incoming_msg:
         #Retreive tweets from Twitter API
-        consumer_key = 'GWA86Mzj6gVmGQVPR4V2tL8Qk'
-        consumer_secret = '4sahREY1Lzp82R1Ap49nIxUnBHXAaZjFGd3kuekHgJUzHItk7n'
-        access_token = '1041371062414528513-irZGuN4dPecJqFt1whbHeGyqdbavgH'
-        access_token_secret = 'ehP1RRdjQGDlGF1d2MKIp22NrGdzRwba9uhrE5pHr8LP5'
+        consumer_key = 'lMiovCOWz1WW6mBNkb3wjd8Mp'
+        consumer_secret = 'CtZTXvslcGioNZTVWWG1vu9HvYrkgPOZOJXjBTM0QQfp0hi3BW'
+        access_token = '1041371062414528513-l3aZZk9DrAV4c8sApOm8Vurb9a1XOa'
+        access_token_secret = 'SKtRBi2Q1pOvXwziDtzskrmdwuK6jBoBRa9e38zWhBL2O'
         auth =tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
         api = tweepy.API(auth)
         screen_name = 'TourismBoardUg'
-        count = 3
+        count = 4
         tweets = api.user_timeline(screen_name=screen_name, count=count)
 
-        tweetsdata =  tweets[0].text + '\n' + tweets[1].text + '\n' + tweets[2].text
+        tweetsdata =  tweets[0].text + '\n' + tweets[1].text + '\n' + tweets[2].text + '\n' + tweets[3].text
         msg.body(tweetsdata)
         responded = True
         app.logger.info('request for tweets')
@@ -44,7 +44,7 @@ def bot():
             #looping through data to get a single response
             for i in data:
                 msg.body(f'{i["name"]}\n{i["about"]}\n{i["link"]}\n')  
-                msg.media(i['image'])
+                #msg.media(i['image'])
                 msg.body('\n-------------------------------\n\n')
                 responded = True
             app.logger.info('request for destinations')
@@ -58,7 +58,7 @@ def bot():
             cars = r.json()
             for i in cars:
                 msg.body(f'{i["type"]}\n {i["carlocation"]}\n{i["price"]}\n {i["contact"]}')  
-                msg.media(i['carimage'])
+                #msg.media(i['carimage'])
                 msg.body('\n-------------------------------\n\n\n ')
                 responded = True
             app.logger.info('request for car hire')
@@ -72,7 +72,7 @@ def bot():
             for i in hotels:
                 linkrates =  i['rates']
                 msg.body(f'{i["Hname"]}\n{i["location"]}\n{i["Services"]}\n {i["website"]}\n {i["email"]}' + '\n\n Download the rates here\n' + linkrates)  
-                msg.media(i['Image'])
+                #msg.media(i['Image'])
                 #msg.media(i['rates'])
                 msg.body('\n-------------------------------\n')
                 responded = True
@@ -86,7 +86,7 @@ def bot():
             tourcompanies = r.json()
             for i in tourcompanies:
                 msg.body(f'{i["Cname"]}\n {i["location"]}\n{i["Services"]}\n {i["website"]}\n {i["email"]}')  
-                msg.media(i['Cimage'])
+                #msg.media(i['Cimage'])
                 msg.body('\n-------------------------------\n')
                 responded = True
             app.logger.info('request for tour companies')
@@ -99,7 +99,7 @@ def bot():
             tourguides = r.json()
             for i in tourguides:
                 msg.body(f'{i["Tname"]}\n {i["Bio"]}\n{i["phonenumber"]}\n {i["link"]}\n')  
-                msg.media(i['profileimage'])
+                #msg.media(i['profileimage'])
                 msg.body('\n-------------------------------\n\n')
                 responded = True
             app.logger.info('request for tour guides')
@@ -125,7 +125,7 @@ def bot():
             
                 tripdataresponse = f'{i["desc"]}\n {i["duration"]}\n {i["inclusions"]}\n {i["date"]}\n {i["accmtype"]}\n {i["price"]} \n {i["payments"]}'
                 msg.body(tripdataresponse)  
-                msg.media(i['poster'])
+                #msg.media(i['poster'])
                 msg.body('\n-------------------------------\n\n')
                 responded = True
                 app.logger.info('request for trips')
@@ -144,7 +144,7 @@ def bot():
         else:
             factresponse = 'Not facts available' 
         msg.body(factresponse)  
-        msg.media(image)
+        #msg.media(image)
         responded = True
         app.logger.info('request for facts')
 
